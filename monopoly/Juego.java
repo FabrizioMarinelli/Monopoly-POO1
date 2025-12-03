@@ -4,17 +4,12 @@ import  java.util.ArrayList;
 import partida.*;
 import java.util.Scanner;
 import java.io.BufferedReader;
-import partida.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 import java.util.Iterator;
-public class Menu {
+public class Juego {
 
     //Atributos
     private ArrayList<Jugador> jugadores; //Jugadores de la partida.
@@ -72,7 +67,7 @@ public class Menu {
         iniciarPartida();
 
     }
-    public Menu(String[] args){
+    public Juego(String[] args){
         jugadores = new ArrayList<>();
         avatares = new ArrayList<>();
         this.banca = new Jugador();

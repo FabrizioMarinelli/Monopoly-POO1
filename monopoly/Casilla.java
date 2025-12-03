@@ -418,13 +418,13 @@ public class Casilla {
                 //evalua que jugador cae en la casilla
                 System.out.println(actual.getNombre() + " ha caído en una casilla de Suerte.");
                 Carta cartaSuerte = tablero.siguienteCarta("suerte");
-                cartaSuerte.ejecutarCarta(actual, tablero, jugadores);
+                cartaSuerte.accion(actual, tablero, jugadores);
                 return true;
 
             case "comunidad":   // Aun falta por implementar
                 System.out.println(actual.getNombre() + " ha caído en una casilla de Comunidad.");
                 Carta cartaComunidad = tablero.siguienteCarta("comunidad");
-                cartaComunidad.ejecutarCarta(actual,tablero, jugadores);
+                cartaComunidad.accion(actual,tablero, jugadores);
                 return true;
 
             default:

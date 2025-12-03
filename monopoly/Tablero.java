@@ -32,19 +32,19 @@ public class Tablero {
 //iniciamos las cartas
         cartasSuerte = new ArrayList<>();
         cartasComunidad = new ArrayList<>();
-        cartasSuerte.add(new Carta(1, "Suerte", "Decides hacer un viaje de placer. Avanza hasta Solar19. Si pasas por la casilla de Salida, cobra 2.000.000€", "MOVER", 0, "Solar19"));
-        cartasSuerte.add(new Carta(2, "Suerte", "Los acreedores te persiguen por impago. Ve a la Cárcel. Ve directamente sin pasar por la casilla de Salida y sin cobrar los 2.000.000€. ", "CARCEL", 0, "Cárcel"));
-        cartasSuerte.add(new Carta(3, "Suerte", "¡Has ganado el bote de la lotería! Recibe 1.000.000€", "COBRAR", 1000000, null));
-        cartasSuerte.add(new Carta(4, "Suerte", "Has sido elegido presidente de la junta directiva. Paga a cada jugador 250.000€. ", "PAGAR", 250000, null));
-        cartasSuerte.add(new Carta(5, "Suerte", "¡Hora punta de tráfico! Retrocede tres casillas.", "RETROCEDER", -3, null));
-        cartasSuerte.add(new Carta(6, "Suerte", "Te multan por usar el móvil mientras conduces. Paga 150.000€.", "PAGAR", 150000, null));
-        cartasSuerte.add(new Carta(7, "Suerte", "Avanza hasta la casilla de transporte más cercana. Si no tiene dueño, puedes comprarla. Si tiene dueño, paga al dueño el doble de la operación indicada.", "MOVER", 0, "Transporte"));
-        cartasComunidad.add(new Carta(1, "Comunidad", "Paga 500.000€ por un fin de semana en un balneario de 5 estrellas.", "PAGAR", 500000, null));
-        cartasComunidad.add(new Carta(2, "Comunidad", "Te investigan por fraude de identidad. Ve a la Cárcel. Ve directamente sin pasar por la casilla de Salida y sin cobrar los 2.000.000€.", "CARCEL", 0, "Cárcel"));
-        cartasComunidad.add(new Carta(3, "Comunidad", "Colócate en la casilla de Salida. Cobra 2.000.000€..", "MOVER", 0, "Salida"));
-        cartasComunidad.add(new Carta(4, "Comunidad", "Devolución de Hacienda. Cobra 500.000€.", "COBRAR", 500000, null));
-        cartasComunidad.add(new Carta(5, "Comunidad", "Retrocede hasta Solar1 para comprar antigüedades exóticas.", "RETROCEDER", 0, "Solar1"));
-        cartasComunidad.add(new Carta(6, "Comunidad", "Ve a Solar20 para disfrutar del San Fermín. Si pasas por la casilla de Salida, cobra 2.000.000€.", "MOVER", 0, "Solar20"));
+        cartasSuerte.add(new Suerte(1, "Decides hacer un viaje de placer. Avanza hasta Solar19. Si pasas por la casilla de Salida, cobra 2.000.000€", "MOVER", 0, "Solar19"));
+        cartasSuerte.add(new Suerte(2, "Los acreedores te persiguen por impago. Ve a la Cárcel. Ve directamente sin pasar por la casilla de Salida y sin cobrar los 2.000.000€. ", "CARCEL", 0, "Cárcel"));
+        cartasSuerte.add(new Suerte(3, "¡Has ganado el bote de la lotería! Recibe 1.000.000€", "COBRAR", 1000000, null));
+        cartasSuerte.add(new Suerte(4, "Has sido elegido presidente de la junta directiva. Paga a cada jugador 250.000€. ", "PAGAR", 250000, null));
+        cartasSuerte.add(new Suerte(5, "¡Hora punta de tráfico! Retrocede tres casillas.", "RETROCEDER", -3, null));
+        cartasSuerte.add(new Suerte(6, "Te multan por usar el móvil mientras conduces. Paga 150.000€.", "PAGAR", 150000, null));
+        cartasSuerte.add(new Suerte(7, "Avanza hasta la casilla de transporte más cercana. Si no tiene dueño, puedes comprarla. Si tiene dueño, paga al dueño el doble de la operación indicada.", "MOVER", 0, "Transporte"));
+        cartasComunidad.add(new CajaComunidad(1, "Paga 500.000€ por un fin de semana en un balneario de 5 estrellas.", "PAGAR", 500000, null));
+        cartasComunidad.add(new CajaComunidad(2, "Te investigan por fraude de identidad. Ve a la Cárcel. Ve directamente sin pasar por la casilla de Salida y sin cobrar los 2.000.000€.", "CARCEL", 0, "Cárcel"));
+        cartasComunidad.add(new CajaComunidad(3, "Colócate en la casilla de Salida. Cobra 2.000.000€..", "MOVER", 0, "Salida"));
+        cartasComunidad.add(new CajaComunidad(4, "Devolución de Hacienda. Cobra 500.000€.", "COBRAR", 500000, null));
+        cartasComunidad.add(new CajaComunidad(5, "Retrocede hasta Solar1 para comprar antigüedades exóticas.", "RETROCEDER", 0, "Solar1"));
+        cartasComunidad.add(new CajaComunidad(6, "Ve a Solar20 para disfrutar del San Fermín. Si pasas por la casilla de Salida, cobra 2.000.000€.", "MOVER", 0, "Solar20"));
     }
 
     //Funcion para inicializar los grupos
