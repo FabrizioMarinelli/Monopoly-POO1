@@ -537,6 +537,15 @@ public class Casilla {
             return false;
         }
 
+        //Comprobamos que el jugador tiene todos los solares pertenecientes al grupo del solar en el que queremos construir
+        Grupo g = this.getGrupo();
+        if (g != null) {
+            if(!g.esDuenhoGrupo(jugador)){
+                System.out.println("No puedes construir en una grupo que no te pertenece al completo.");
+                return false;
+            }
+        }
+
         //No se puede construir si la casilla está hipotecada
         if(casilla.isHipotecada()){
             System.out.println("No puedes construir en una propiedad hipotecada.");

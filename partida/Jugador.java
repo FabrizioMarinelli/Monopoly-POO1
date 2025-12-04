@@ -327,7 +327,7 @@ public class Jugador {
         edificios.add(e);
     }
 
-
+    public void eliminarEdificio(Edificio e){edificios.remove(e);}
     @Override
     public String toString() {
         return """

@@ -686,6 +686,25 @@ public class Menu {
             System.out.println("La fortuna no es suficiente para construir el edificio\n");
             return;
         }
+
+        //Comprobamos el caso de que tengamos 4 casas y vayamos a contruir un hotel
+        //Pues se deben eliminar las 4 casas
+        if(tipo.equals("hotel")) {
+            int casasEliminadas = 0;
+
+            //Eliminamos las casas del jugador y de la casilla
+            Iterator<Edificio> it = casilla.getEdificios().iterator();
+            while (it.hasNext()) {
+                Edificio e = it.next();
+                if (e.getTipo().equals("casa")) {
+                    it.remove();                      //Quitamos las casas de la casilla
+                    propietario.eliminarEdificio(e);  //Quitamos las casas del jugador
+                    casasEliminadas++;
+
+                    if (casasEliminadas == 4) break;
+                }
+            }
+        }
         //Modificamos la fortuna del jugador y actualizamos sus estadisticas
         propietario.setFortuna(propietario.getFortuna() - coste);
         propietario.sumarDineroInvertido(coste);
