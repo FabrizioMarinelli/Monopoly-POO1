@@ -17,8 +17,8 @@ public class Tablero {
     private HashMap<String, Grupo> grupos; //Grupos del tablero, almacenados como un HashMap con clave String (será elcolor del grupo).
     private Jugador banca; //Un jugador que será la banca.
     //atributos para las cartas
-    private ArrayList<Carta> cartasSuerte;
-    private ArrayList<Carta> cartasComunidad;
+    private ArrayList<Suerte> cartasSuerte;
+    private ArrayList<CajaComunidad> cartasComunidad;
     private int indiceSuerte = 0;
     private int indiceComunidad = 0;
 
@@ -49,17 +49,56 @@ public class Tablero {
 
     //Funcion para inicializar los grupos
     private void crearGrupos() {
-        Grupo g1 = new Grupo(encontrar_casilla("Solar1"), encontrar_casilla("Solar2"), "BLANCO");
-        Grupo g2 = new Grupo(encontrar_casilla("Solar3"), encontrar_casilla("Solar4"), encontrar_casilla("Solar5"), "CIAN");
-        Grupo g3 = new Grupo(encontrar_casilla("Solar6"), encontrar_casilla("Solar7"), encontrar_casilla("Solar8"), "MAGENTA");
-        Grupo g4 = new Grupo(encontrar_casilla("Solar9"), encontrar_casilla("Solar10"), encontrar_casilla("Solar11"),
-                "NARANJA");
-        Grupo g5 = new Grupo(encontrar_casilla("Solar12"), encontrar_casilla("Solar13"), encontrar_casilla("Solar14"), "ROJO");
-        Grupo g6 = new Grupo(encontrar_casilla("Solar15"), encontrar_casilla("Solar16"), encontrar_casilla("Solar17"),
-                "AMARILLO");
-        Grupo g7 = new Grupo(encontrar_casilla("Solar18"), encontrar_casilla("Solar19"), encontrar_casilla("Solar20"), "VERDE");
-        Grupo g8 = new Grupo(encontrar_casilla("Solar21"), encontrar_casilla("Solar22"), "AZUL");
-// Guardar en el HashMap
+        // Creamos listas de propiedades para cada grupo
+        ArrayList<Propiedad> blanco = new ArrayList<>();
+        blanco.add((Propiedad) encontrar_casilla("Solar1"));
+        blanco.add((Propiedad) encontrar_casilla("Solar2"));
+
+        ArrayList<Propiedad> cian = new ArrayList<>();
+        cian.add((Propiedad) encontrar_casilla("Solar3"));
+        cian.add((Propiedad) encontrar_casilla("Solar4"));
+        cian.add((Propiedad) encontrar_casilla("Solar5"));
+
+        ArrayList<Propiedad> magenta = new ArrayList<>();
+        magenta.add((Propiedad) encontrar_casilla("Solar6"));
+        magenta.add((Propiedad) encontrar_casilla("Solar7"));
+        magenta.add((Propiedad) encontrar_casilla("Solar8"));
+
+        ArrayList<Propiedad> naranja = new ArrayList<>();
+        naranja.add((Propiedad) encontrar_casilla("Solar9"));
+        naranja.add((Propiedad) encontrar_casilla("Solar10"));
+        naranja.add((Propiedad) encontrar_casilla("Solar11"));
+
+        ArrayList<Propiedad> rojo = new ArrayList<>();
+        rojo.add((Propiedad) encontrar_casilla("Solar12"));
+        rojo.add((Propiedad) encontrar_casilla("Solar13"));
+        rojo.add((Propiedad) encontrar_casilla("Solar14"));
+
+        ArrayList<Propiedad> amarillo = new ArrayList<>();
+        amarillo.add((Propiedad) encontrar_casilla("Solar15"));
+        amarillo.add((Propiedad) encontrar_casilla("Solar16"));
+        amarillo.add((Propiedad) encontrar_casilla("Solar17"));
+
+        ArrayList<Propiedad> verde = new ArrayList<>();
+        verde.add((Propiedad) encontrar_casilla("Solar18"));
+        verde.add((Propiedad) encontrar_casilla("Solar19"));
+        verde.add((Propiedad) encontrar_casilla("Solar20"));
+
+        ArrayList<Propiedad> azul = new ArrayList<>();
+        azul.add((Propiedad) encontrar_casilla("Solar21"));
+        azul.add((Propiedad) encontrar_casilla("Solar22"));
+
+        // Creamos los grupos pasando las listas de propiedades
+        Grupo g1 = new Grupo("BLANCO", blanco);
+        Grupo g2 = new Grupo("CIAN", cian);
+        Grupo g3 = new Grupo("MAGENTA", magenta);
+        Grupo g4 = new Grupo("NARANJA", naranja);
+        Grupo g5 = new Grupo("ROJO", rojo);
+        Grupo g6 = new Grupo("AMARILLO", amarillo);
+        Grupo g7 = new Grupo("VERDE", verde);
+        Grupo g8 = new Grupo("AZUL", azul);
+
+        // Guardar en el HashMap
         grupos.put("BLANCO", g1);
         grupos.put("CIAN", g2);
         grupos.put("MAGENTA", g3);
@@ -68,10 +107,11 @@ public class Tablero {
         grupos.put("AMARILLO", g6);
         grupos.put("VERDE", g7);
         grupos.put("AZUL", g8);
-// Asignar el grupo a las casillas
+
+        // Asignar el grupo a cada propiedad
         for (Grupo g : grupos.values()) {
-            for (Casilla c : g.getMiembros()) {
-                c.setGrupo(g);
+            for (Propiedad p : g.getPropiedades()) {
+                p.setGrupo(g);
             }
         }
     }
@@ -138,7 +178,7 @@ public class Tablero {
             color = BLANCO;
         } else if (c.getTipo().equalsIgnoreCase("comunidad")) {
             color = BLANCO;
-        } else if (c.getTipo().equalsIgnoreCase("servicios")) {
+        } else if (c.getTipo().equalsIgnoreCase("servicio")) {
             color = BLANCO;
         } else if (c.getTipo().equalsIgnoreCase("transporte")) {
             color = BLANCO;
@@ -152,7 +192,6 @@ public class Tablero {
 
     //Método para crear todas las casillas del tablero. Formado a su vez por cuatro métodos (1/lado).
     private void generarCasillas() {
-        Casilla Casilla = new Casilla();
         this.insertarLadoSur();
         this.insertarLadoOeste();
         this.insertarLadoNorte();
@@ -162,64 +201,66 @@ public class Tablero {
     //Método para insertar las casillas del lado norte.
     private void insertarLadoNorte() {
         ArrayList<Casilla> ladoNorte = new ArrayList<>();
-        ladoNorte.add(new Casilla("Parking", "Especial", 21, banca));
-        ladoNorte.add(new Casilla("Solar12", "Solar", 22, 2_200_000f, banca, null, null, 1_100_000f, 0f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_200_000f, 10_500_000f, 2_100_000f, 2_100_000f, 1_100_000f));
-        ladoNorte.add(new Casilla("Suerte2", "Suerte", 23, banca));
-        ladoNorte.add(new Casilla("Solar13", "Solar", 24, 2_200_000f, banca, null, null, 1_100_000f, 0f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_200_000f, 10_500_000f, 2_100_000f, 2_100_000f, 1_100_000f));
-        ladoNorte.add(new Casilla("Solar14", "Solar", 25, 2_400_000f, banca, null, null, 1_200_000f, 0f, 1_600_000f, 1_600_000f, 400_000f, 700_000f, 2_400_000f, 11_000_000f, 2_400_000f, 2_400_000f, 1_200_000f));
-        ladoNorte.add(new Casilla("Trans3", "Transporte", 26, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoNorte.add(new Casilla("Solar15", "Solar", 27, 2_600_000f, banca, null, null, 1_300_000f, 0f, 1_700_000f, 1_700_000f, 500_000f, 800_000f, 2_600_000f, 11_500_000f, 2_600_000f, 2_600_000f, 1_300_000f));
-        ladoNorte.add(new Casilla("Solar16", "Solar", 28, 2_600_000f, banca, null, null, 1_300_000f, 0f, 1_700_000f, 1_700_000f, 500_000f, 800_000f, 2_600_000f, 11_500_000f, 2_600_000f, 2_600_000f, 1_300_000f));
-        ladoNorte.add(new Casilla("Serv2", "Servicios", 29, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoNorte.add(new Casilla("Solar17", "Solar", 30, 2_800_000f, banca, null, null, 1_400_000f, 0f, 1_800_000f, 1_800_000f, 600_000f, 900_000f, 2_800_000f, 12_000_000f, 2_800_000f, 2_800_000f, 1_400_000f));
-        ladoNorte.add(new Casilla("IrCarcel", "Especial", 31, banca));
+        ladoNorte.add(new Parking("Parking", 21, 0f));
+        ladoNorte.add(new Solar("Solar12", 22, 2_200_000f, 180_000f, 1_500_000f, 1_500_000f, 300_000f, 300_000f, 2_000_000f, 10_500_000f, 2_100_000f,  2_100_000f,  1_100_000f));
+        ladoNorte.add(new CasillaSuerte("Suerte2", 23));
+        ladoNorte.add(new Solar("Solar13", 24, 2_200_000f, 180_000f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_200_000f, 10_500_000f, 2_100_000f, 2_100_000f, 1_100_000f));
+        ladoNorte.add(new Solar("Solar14", 25, 2_400_000f, 200_000f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_325_000f, 11_000_000f, 2_200_000f, 2_200_000f, 1_200_000f));
+        ladoNorte.add(new Transporte("Trans3", 26, 500_000f, 250_000f));
+        ladoNorte.add(new Solar("Solar15", 27, 2_600_000f, 220_000f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_450_000f, 11_500_000f, 2_300_000f, 2_300_000f, 1_300_000f));
+        ladoNorte.add(new Solar("Solar16", 28, 2_600_000f, 220_000f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_450_000f, 11_500_000f, 2_300_000f, 2_300_000f, 1_300_000f));
+        ladoNorte.add(new Servicio("Serv2", 29, 500_000f, 50_000f));
+        ladoNorte.add(new Solar("Solar17", 30, 2_800_000f, 240_000f, 1_500_000f, 1_500_000f, 300_000f, 600_000f, 2_600_000f, 12_000_000f, 2_400_000f, 2_400_000f, 1_400_000f));
+        ladoNorte.add(new Especial("IrCarcel", 31));
+
         posiciones.add(ladoNorte);
     }
 
     //Método para insertar las casillas del lado sur.
     private void insertarLadoSur() {
         ArrayList<Casilla> ladoSur = new ArrayList<>();
-        ladoSur.add(new Casilla("Salida", "Especial", 1, banca));
-        ladoSur.add(new Casilla("Solar1", "Solar", 2, 600_000f, banca, null, null, 300_000f, 0f, 500_000f, 500_000f, 300_000f, 700_000f, 1_800_000f, 9_000_000f, 1_800_000f, 1_800_000f, 300_000f));
-        ladoSur.add(new Casilla("Caja1", "Comunidad", 3, banca));
-        ladoSur.add(new Casilla("Solar2", "Solar", 4, 600_000f, banca, null, null, 300_000f, 0f, 500_000f, 500_000f, 300_000f, 700_000f, 1_800_000f, 9_000_000f, 1_800_000f, 1_800_000f, 300_000f));
-        ladoSur.add(new Casilla("Imp1", 5, 2_000_000f, banca));
-        ladoSur.add(new Casilla("Trans1", "Transporte", 6, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoSur.add(new Casilla("Solar3", "Solar", 7, 1_000_000f, banca, null, null, 500_000f, 0f, 800_000f, 800_000f, 400_000f, 900_000f, 3_000_000f, 14_000_000f, 3_000_000f, 3_000_000f, 500_000f));
-        ladoSur.add(new Casilla("Suerte1", "Suerte", 8, banca));
-        ladoSur.add(new Casilla("Solar4", "Solar", 9, 1_000_000f, banca, null, null, 500_000f, 0f, 800_000f, 800_000f, 400_000f, 900_000f, 3_000_000f, 14_000_000f, 3_000_000f, 3_000_000f, 500_000f));
-        ladoSur.add(new Casilla("Solar5", "Solar", 10, 1_000_000f, banca, null, null, 500_000f, 0f, 800_000f, 800_000f, 400_000f, 900_000f, 3_000_000f, 14_000_000f, 3_000_000f, 3_000_000f, 600_000f));
-        ladoSur.add(new Casilla("Carcel", "Especial", 11, banca));
+        ladoSur.add(new Especial("Salida", 1));
+        ladoSur.add(new Solar("Solar1", 2, 600_000f, 20_000f, 500_000f, 500_000f, 100_000f, 200_000f, 400_000f, 2_500_000f, 500_000f, 500_000f, 300_000f));
+        ladoSur.add(new CasillaComunidad("Caja1", 3));
+        ladoSur.add(new Solar("Solar2", 4, 600_000f, 40_000f, 500_000f, 500_000f, 100_000f, 200_000f, 800_000f, 4_500_000f, 900_000f, 900_000f, 300_000f));
+        ladoSur.add(new Impuesto("Imp1", 5, 2_000_000f));
+        ladoSur.add(new Transporte("Trans1", 6, 500_000f, 250_000f));
+        ladoSur.add(new Solar("Solar3", 7, 1_000_000f, 60_000f, 500_000f, 500_000f, 100_000f, 200_000f, 1_000_000f, 5_500_000f, 1_100_000f, 1_100_000f, 500_000f));
+        ladoSur.add(new CasillaSuerte("Suerte1", 8));
+        ladoSur.add(new Solar("Solar4", 9, 60_000f, 500_000f, 500_000f, 500_000f, 100_000f, 200_000f, 1_000_000f, 5_500_000f, 1_100_000f, 1_100_000f, 500_000f));
+        ladoSur.add(new Solar("Solar5", 10, 80_000f, 500_000f, 500_000f, 500_000f, 100_000f, 200_000f, 1_250_000f, 6_000_000f, 1_200_000f, 1_200_000f, 600_000f));
+        ladoSur.add(new Especial("Carcel", 11));
+
         posiciones.add(ladoSur);
     }
 
     //Método que inserta casillas del lado oeste.
     private void insertarLadoOeste() {
         ArrayList<Casilla> ladoOeste = new ArrayList<>();
-        ladoOeste.add(new Casilla("Solar6", "Solar", 12, 1_200_000f, banca, null, null, 600_000f, 0f, 900_000f, 900_000f, 500_000f, 1_100_000f, 3_600_000f, 16_000_000f, 3_600_000f, 3_600_000f, 700_000f));
-        ladoOeste.add(new Casilla("Solar7", "Solar", 13, 1_400_000f, banca, null, null, 700_000f, 0f, 1_000_000f, 1_000_000f, 600_000f, 1_200_000f, 4_200_000f, 17_000_000f, 4_200_000f, 4_200_000f, 700_000f));
-        ladoOeste.add(new Casilla("Serv1", "Servicios", 14, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoOeste.add(new Casilla("Solar8", "Solar", 15, 1_400_000f, banca, null, null, 700_000f, 0f, 1_000_000f, 1_000_000f, 600_000f, 1_200_000f, 4_200_000f, 17_000_000f, 4_200_000f, 4_200_000f, 800_000f));
-        ladoOeste.add(new Casilla("Solar9", "Solar", 16, 1_600_000f, banca, null, null, 800_000f, 0f, 1_100_000f, 1_100_000f, 700_000f, 1_400_000f, 4_800_000f, 19_000_000f, 4_800_000f, 4_800_000f, 900_000f));
-        ladoOeste.add(new Casilla("Trans2", "Transporte", 17, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoOeste.add(new Casilla("Solar10", "Solar", 18, 1_800_000f, banca, null, null, 900_000f, 0f, 1_200_000f, 1_200_000f, 800_000f, 1_600_000f, 5_400_000f, 20_000_000f, 5_400_000f, 5_400_000f, 900_000f));
-        ladoOeste.add(new Casilla("Caja2", "Comunidad", 19, banca));
-        ladoOeste.add(new Casilla("Solar11", "Solar", 20, 1_800_000f, banca, null, null, 900_000f, 0f, 1_200_000f, 1_200_000f, 800_000f, 1_600_000f, 5_400_000f, 20_000_000f, 5_400_000f, 5_400_000f, 1_000_000f));
+        ladoOeste.add(new Solar("Solar6", 12, 1_400_000f, 100_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 1_500_000f, 7_500_000f, 1_500_000f, 1_500_000f, 700_000f));
+        ladoOeste.add(new Solar("Solar7", 13, 1_400_000f, 100_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 1_500_000f, 7_500_000f, 1_500_000f, 1_500_000f, 700_000f));
+        ladoOeste.add(new Servicio("Serv1", 14, 500_000f, 50_000f));
+        ladoOeste.add(new Solar("Solar8", 15, 1_600_000f, 120_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 1_750_000f, 9_000_000f, 1_800_000f, 1_800_000f, 800_000f));
+        ladoOeste.add(new Solar("Solar9", 16, 1_800_000f, 140_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 1_850_000f, 9_500_000f, 1_900_000f, 1_900_000f, 900_000f));
+        ladoOeste.add(new Transporte("Trans2", 17, 500_000f, 250_000f));
+        ladoOeste.add(new Solar("Solar10", 18, 1_800_000f, 140_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 1_850_000f, 9_500_000f, 1_900_000f, 1_900_000f, 900_000f));
+        ladoOeste.add(new CasillaComunidad("Caja2", 19));
+        ladoOeste.add(new Solar("Solar11", 20, 2_200_000f, 160_000f, 1_000_000f, 1_000_000f, 200_000f, 400_000f, 2_000_000f, 10_000_000f, 2_000_000f, 2_000_000f, 1_000_000f));
         posiciones.add(ladoOeste);
     }
 
     //Método que inserta las casillas del lado este.
     private void insertarLadoEste() {
         ArrayList<Casilla> ladoEste = new ArrayList<>();
-        ladoEste.add(new Casilla("Solar18", "Solar", 32, 3_000_000f, banca, null, null, 1_500_000f, 0f, 1_900_000f, 1_900_000f, 700_000f, 1_000_000f, 3_000_000f, 12_500_000f, 3_000_000f, 3_000_000f, 1_500_000f));
-        ladoEste.add(new Casilla("Solar19", "Solar", 33, 3_000_000f, banca, null, null, 1_500_000f, 0f, 1_900_000f, 1_900_000f, 700_000f, 1_000_000f, 3_000_000f, 12_500_000f, 3_000_000f, 3_000_000f, 1_500_000f));
-        ladoEste.add(new Casilla("Caja3", "Comunidad", 34, banca));
-        ladoEste.add(new Casilla("Solar20", "Solar", 35, 3_200_000f, banca, null, null, 1_600_000f, 0f, 2_000_000f, 2_000_000f, 800_000f, 1_100_000f, 3_200_000f, 13_000_000f, 3_200_000f, 3_200_000f, 1_600_000f));
-        ladoEste.add(new Casilla("Trans4", "Transporte", 36, 500_000f, banca, null, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f));
-        ladoEste.add(new Casilla("Solar21", "Solar", 37, 3_500_000f, banca, null, null, 1_700_000f, 0f, 2_200_000f, 2_200_000f, 900_000f, 1_200_000f, 3_500_000f, 14_000_000f, 3_500_000f, 3_500_000f, 1_750_000f));
-        ladoEste.add(new Casilla("Suerte3", "Suerte", 38, banca));
-        ladoEste.add(new Casilla("Imp2", 39, 2_000_000f, banca));
-        ladoEste.add(new Casilla("Solar22", "Solar", 40, 4_000_000f, banca, null, null, 2_000_000f, 0f, 2_500_000f, 2_500_000f, 1_000_000f, 1_500_000f, 4_000_000f, 15_000_000f, 4_000_000f, 4_000_000f, 2_000_000f));
+        ladoEste.add(new Solar("Solar18", 32, 3_000_000f, 260_000f, 2_000_000f, 2_000_000f, 400_000f, 800_000f, 2_750_000f, 12_750_000f, 2_550_000f, 2_550_000f, 1_500_000f));
+        ladoEste.add(new Solar("Solar19", 33, 3_000_000f, 260_000f, 2_000_000f, 2_000_000f, 400_000f, 800_000f, 2_750_000f, 12_750_000f, 2_550_000f, 2_550_000f, 1_500_000f));
+        ladoEste.add(new CasillaSuerte("Caja3", 34));
+        ladoEste.add(new Solar("Solar20", 35, 3_200_000f, 280_000f, 2_000_000f, 2_000_000f, 400_000f, 800_000f, 3_000_000f, 14_000_000f, 2_800_000f, 2_800_000f, 1_600_000f));
+        ladoEste.add(new Transporte("Trans4", 36, 500_000f, 250_000f));
+        ladoEste.add(new Solar("Solar21", 37, 3_500_000f, 350_000f, 2_000_000f, 2_000_000f, 400_000f, 800_000f, 3_250_000f, 17_000_000f, 3_400_000f, 3_400_000f, 1_750_000f));
+        ladoEste.add(new CasillaSuerte("Suerte3", 38));
+        ladoEste.add(new Impuesto("Imp2", 39, 2_000_000f));
+        ladoEste.add(new Solar("Solar22", 40, 4_000_000f, 500_000f, 2_000_000f, 2_000_000f, 400_000f, 800_000f, 4_250_000f, 20_000_000f, 4_000_000f, 4_000_000f, 2_000_000f));
         posiciones.add(ladoEste);
     }
 
@@ -227,18 +268,18 @@ public class Tablero {
 //La hacemos private porque solo la vamos a utilizar dentro de la clase en la que la acabamos de definir
     private String mostrarAvatares(Casilla c) {
         StringBuilder sb = new StringBuilder();
-// Si hay avatares en la casilla, mostramos sus iniciales junto un '&' como se muestra en el .pdf
+        // Si hay avatares en la casilla, mostramos sus iniciales junto un '&' como se muestra en el .pdf
         if (c.getAvatares() != null && !c.getAvatares().isEmpty()) {
             sb.append(" &");
             for (Avatar a : c.getAvatares()) {
-//Comprobamos que existan avatares en ese momento en la casilla
+                //Comprobamos que existan avatares en ese momento en la casilla
                 if (c.getAvatares() != null && !c.getAvatares().isEmpty()) {
-//Imprimimos el identificador del avatar
+                    //Imprimimos el identificador del avatar
                     sb.append(a.getId());
                 }
             }
         }
-//Establecemos una longitud fija
+        //Establecemos una longitud fija
         String texto = sb.toString();
         int longitud = 6;
         if (texto.length() < longitud) {
@@ -301,7 +342,7 @@ public class Tablero {
         //Recorremos las listas
         for (ArrayList<Casilla> lado : this.posiciones){
             for (Casilla c : lado){
-                //Devolvemos cada casillaº
+                //Devolvemos cada casilla
                 if (c.getNombre().equalsIgnoreCase(nombre)){
                     return c;
                 }
@@ -311,24 +352,27 @@ public class Tablero {
     }
 
 
-    //Método para calcular la siguiente carta
-    public Carta siguienteCarta(String tipo) {
-        Carta carta = null;
+    //Método para calcular la siguiente carta de Suerte
+    public Suerte siguienteCartaSuerte() {
+        Suerte carta = null;
         //Buscamos cual es el tipo de la carta para poder calcular el indice que corresponda
-        if (tipo.equalsIgnoreCase("Suerte")) {
-            carta = cartasSuerte.get(indiceSuerte);
-            indiceSuerte = (indiceSuerte + 1) % cartasSuerte.size(); //de este modo avanza de manera circular
-        } else if (tipo.equalsIgnoreCase("Comunidad")) {
-            carta = cartasComunidad.get(indiceComunidad);
-            indiceComunidad = (indiceComunidad + 1) % cartasComunidad.size();
-        }
+        carta = cartasSuerte.get(indiceSuerte);
+        indiceSuerte = (indiceSuerte + 1) % cartasSuerte.size(); //de este modo avanza de manera circular
+
         //Devolvemos la carta
         return carta;
     }
-    //Método para describir la casilla
-   /* public Casilla describirCasilla(String nombre){
 
+    //Método para calcular la siguiente carta de Caja de Comunidad
+    public CajaComunidad siguienteCartaComunidad() {
+        CajaComunidad carta = null;
+        //Buscamos cual es el tipo de la carta para poder calcular el indice que corresponda
+        carta = cartasComunidad.get(indiceComunidad);
+        indiceComunidad = (indiceComunidad + 1) % cartasComunidad.size(); //de este modo avanza de manera circular
 
-    }*/
+        //Devolvemos la carta
+        return carta;
+    }
+
 }
 

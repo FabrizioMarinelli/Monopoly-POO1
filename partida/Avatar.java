@@ -115,7 +115,7 @@ public class Avatar {
         nuevaCasilla.getAvatares().add(this);
 
         //actualizamos las estadisticas de la partida
-        nuevaCasilla.incrementarVecesPisada();
+        nuevaCasilla.incrementarVisita();
     }
 
     /*Método que permite generar un ID para un avatar. Sólo lo usamos en esta clase (por ello es privado).

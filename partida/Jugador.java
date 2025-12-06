@@ -240,17 +240,17 @@ public class Jugador {
 
     //Otros métodos:
     //Método para añadir una propiedad al jugador. Como parámetro, la casilla a añadir.
-    public void anhadirPropiedad(Casilla casilla) {
+    public void anhadirPropiedad(Propiedad casilla) {
         //se comprueba que la casilla no pertenezca ya al jugador
         if(!propiedades.contains(casilla)){
             propiedades.add(casilla);
-            casilla.    setDuenho(this);
+            casilla.setDuenho(this);
         }
 
     }
 
     //Método para eliminar una propiedad del arraylist de propiedades de jugador.
-    public void eliminarPropiedad(Casilla casilla) {
+    public void eliminarPropiedad(Propiedad casilla) {
         //se comprueba que la propiedad pertenezca al jugador
         if(propiedades.contains(casilla)){
             propiedades.remove(casilla);

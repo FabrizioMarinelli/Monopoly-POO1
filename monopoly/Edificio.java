@@ -16,7 +16,7 @@ public class Edificio {
 
 
     //Constructor
-    public Edificio(String tipo, Jugador propietario, Casilla casilla, float coste){
+    public Edificio(String tipo, Jugador propietario, Propiedad casilla, float coste){
         this.tipo = tipo;
         this.propietario = propietario;
         this.casilla = casilla;

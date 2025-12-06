@@ -1,85 +1,85 @@
 package monopoly;
 
-import partida.*;
+import partida.Jugador;
 import java.util.ArrayList;
 
+/**
+ * Clase Grupo: representa un grupo de propiedades del mismo color.
+ * Es una casilla en el tablero, pero funciona como contenedor de propiedades.
+ */
+public final class Grupo extends Casilla {
 
-class Grupo {
+    private String colorGrupo;
+    private ArrayList<Propiedad> miembros; // Relación de composición
 
-    //Atributos
-    private ArrayList<Casilla> miembros; //Casillas miembros del grupo.
-    private String colorGrupo; //Color del grupo
-    private int numCasillas; //Número de casillas del grupo.
-
-    //Constructor vacío.
-    public Grupo() {
-        miembros = new ArrayList<>();
-    }
-
-    /*Constructor para cuando el grupo está formado por DOS CASILLAS:
-     * Requiere como parámetros las dos casillas miembro y el color del grupo.
-     */
-    public Grupo(Casilla cas1, Casilla cas2, String colorGrupo) {
-        this.miembros = new ArrayList<>();
+    public Grupo(String colorGrupo) {
+        super("Grupo " + colorGrupo, -1); // Posición -1 porque un grupo no es casilla física en el tablero
         this.colorGrupo = colorGrupo;
-        this.miembros.add(cas1);
-        this.miembros.add(cas2);
-        this.numCasillas = 2;
-    }
-
-    /*Constructor para cuando el grupo está formado por TRES CASILLAS:
-     * Requiere como parámetros las tres casillas miembro y el color del grupo.
-     */
-    public Grupo(Casilla cas1, Casilla cas2, Casilla cas3, String colorGrupo) {
         this.miembros = new ArrayList<>();
-        this.colorGrupo = colorGrupo;
-        this.miembros.add(cas1);
-        this.miembros.add(cas2);
-        this.miembros.add(cas3);
-        this.numCasillas = 3;
     }
 
-    /* Método que añade una casilla al array de casillas miembro de un grupo.
-     * Parámetro: casilla que se quiere añadir.
-     */
-    public void anhadirCasilla(Casilla miembro) {
-        if(miembro != null && miembros.contains(miembro)) {
-            miembros.add(miembro);
-            numCasillas++;
+    // Constructor con lista de propiedades
+    public Grupo(String colorGrupo, ArrayList<Propiedad> propiedades) {
+        super("Grupo " + colorGrupo, -1);
+        this.colorGrupo = colorGrupo;
+        this.miembros = new ArrayList<>(propiedades);
+    }
+
+    /** Añade una propiedad al grupo */
+    public void anhadirPropiedad(Propiedad propiedad) {
+        if (propiedad != null && !miembros.contains(propiedad)) {
+            miembros.add(propiedad);
         }
     }
 
-    /*Método que comprueba si el jugador pasado tiene en su haber todas las casillas del grupo:
-     * Parámetro: jugador que se quiere evaluar.
-     * Valor devuelto: true si es dueño de todas las casillas del grupo, false en otro caso.
-     */
+    /** Comprueba si el jugador posee todas las propiedades del grupo */
     public boolean esDuenhoGrupo(Jugador jugador) {
-        for(Casilla casilla : miembros) {
-            if(casilla.getDuenho() == null ||  !casilla.getDuenho().equals(jugador)) {
-                return false;
-            }
+        for (Propiedad p : miembros) {
+            if (!p.perteneceAJugador(jugador)) return false;
         }
         return true;
     }
 
-    //Getter del color del grupo
-    public String getColorGrupo(){
-        return colorGrupo;
-
-    }
-
-    //Getter de las casillas del grupo
-    public ArrayList<Casilla> getMiembros() {
+    /** Devuelve la lista de propiedades del grupo */
+    public ArrayList<Propiedad> getPropiedades() {
         return miembros;
     }
 
-    //Método para saber el dinero generado por un grupo
+    public String getColorGrupo() {
+        return colorGrupo;
+    }
+
+    /** Devuelve el dinero total generado por todas las propiedades del grupo */
     public float getDineroGenerado() {
         float total = 0;
-        for (Casilla c : miembros) {
-            total += c.getDineroGenerado();   // ya lo tienes implementado en Casilla
+        for (Propiedad p : miembros) {
+            total += p.getDineroGenerado();
         }
         return total;
     }
-}
+    //Getter de las casillas del grupo
+    public ArrayList<Propiedad> getMiembros() {
+        return miembros;
+    }
 
+    public void setMiembros(ArrayList<Propiedad> miembros) {
+        this.miembros = miembros;
+    }
+
+    // Implementación del método abstracto de Casilla
+    @Override
+    public boolean evaluarCasilla(Jugador actual, Jugador banca, Tablero tablero, int tirada, ArrayList<Jugador> jugadores) {
+        // Como un grupo no es una casilla concreta, no se paga nada al caer en él
+        System.out.println(actual.getNombre() + " ha caído en el grupo " + colorGrupo + ". Esto solo representa un conjunto de propiedades.");
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Grupo " + colorGrupo + " con " + miembros.size() + " propiedades.";
+    }
+    @Override
+    public String getTipo() {
+        return "Grupo";
+    }
+}

@@ -3,7 +3,7 @@ package monopoly;
 import partida.Jugador;
 import java.util.ArrayList;
 
-public class CajaComunidad extends Carta{
+public final class CajaComunidad extends Carta{
     public CajaComunidad(int id, String descripcion, String accion, float cantidad, String destino) {
         super(id, descripcion, accion, cantidad, destino);
     }

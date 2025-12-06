@@ -3,7 +3,7 @@ package monopoly;
 import partida.Jugador;
 import java.util.ArrayList;
 
-public class Suerte extends Carta {
+public final class Suerte extends Carta {
     public Suerte(int id, String descripcion, String accion, float cantidad, String destino) {
         super(id, descripcion, accion, cantidad, destino);
     }
