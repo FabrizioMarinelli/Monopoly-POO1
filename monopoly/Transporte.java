@@ -55,9 +55,7 @@ public final class Transporte extends Propiedad {
     @Override
     public boolean evaluarCasilla(Jugador actual, Jugador banca, Tablero tablero,
                                   int tirada, ArrayList<Jugador> jugadores) {
-
-        this.incrementarVisita();
-
+        
         // Si no tiene dueño, se puede comprar
         if (duenho == null || duenho.equals(banca)) {
             System.out.println(actual.getNombre() + " ha caído en el transporte " + nombre +
