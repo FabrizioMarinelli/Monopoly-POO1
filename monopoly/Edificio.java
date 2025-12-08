@@ -14,7 +14,11 @@ public abstract class Edificio {
         this.propietario = propietario;
         this.casilla = casilla;
         this.coste = coste;
-        this.grupo = casilla != null ? casilla.getGrupo() : null;
+        if (casilla instanceof Solar s) {   //tenemos que comprobar que la casilla sea un solar para poder asignarle un grupo, si no este sera null
+            this.grupo = s.getGrupo();
+        } else {
+            this.grupo = null;
+        }
         this.id = this.generarId();
     }
 
