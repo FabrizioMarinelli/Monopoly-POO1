@@ -633,30 +633,52 @@ public class Juego {
         }
 
         if (!casilla.posibleConstruir(tipo, propietario)) {
-            System.out.println("No se cumplen los requisitos para construir el edificio que solicita en este solar.");
-            return;
+            System.out.println("No se cumplen los requesitos para construir el edificio que solicita en este solar\n");
+        } else if (propietario.getFortuna() < coste) {
+            System.out.println("La fortuna no es suficiente para construir el edificio\n");
+        } else {
+            if (tipo.equals("hotel")) {
+                int casasEliminadas = 0;
+                Iterator<Edificio> it = casilla.getEdificios().iterator();
+
+                while(it.hasNext()) {
+                    Edificio e = (Edificio)it.next();
+                    if (e.getTipo().equals("casa")) {
+                        it.remove();
+                        propietario.eliminarEdificio(e);
+                        ++casasEliminadas;
+                        if (casasEliminadas == 4) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            propietario.setFortuna(propietario.getFortuna() - coste);
+            propietario.sumarDineroInvertido(coste);
+            Edificio nuevoEdificio;
+            switch (tipo) {
+                case "casa":
+                    nuevoEdificio = new Casa(propietario, casilla, coste);
+                    break;
+                case "hotel":
+                    nuevoEdificio = new Hotel(propietario, casilla, coste);
+                    break;
+                case "piscina":
+                    nuevoEdificio = new Piscina(propietario, casilla, coste);
+                    break;
+                case "pistaDeporte":
+                    nuevoEdificio = new PistaDeporte(propietario, casilla, coste);
+                    break;
+                default:
+                    System.out.println("Tipo no válido.");
+                    return;
+            }
+
+            propietario.anhadirEdificio(nuevoEdificio);
+            casilla.anhadirEdificio(nuevoEdificio);
+            System.out.printf("Nueva edificación: %s en el solar: %s. La fortuna de %s se reduce en %.2f€.%n", tipo, casilla.getNombre(), propietario.getNombre(), coste);
         }
-
-        if (propietario.getFortuna() < coste) {
-            System.out.println("La fortuna no es suficiente para construir el edificio.");
-            return;
-        }
-
-        // Modificamos la fortuna del jugador y actualizamos sus estadísticas
-        propietario.sumarFortuna(-coste);
-        propietario.sumarDineroInvertido(coste);
-
-        // Creamos el nuevo edificio
-        Edificio nuevoEdificio = new Edificio(tipo, propietario, casilla, coste);
-
-        // Le asignamos al jugador su nuevo edificio
-        propietario.anhadirEdificio(nuevoEdificio);
-
-        // Le asignamos a la casilla su nuevo edificio
-        casilla.anhadirEdificio(nuevoEdificio);
-
-        System.out.printf("Nueva edificación: %s en el solar: %s. La fortuna de %s se reduce en %.2f€.%n",
-                tipo, casilla.getNombre(), propietario.getNombre(), coste);
     }
 
     //Método para vender los edificios
