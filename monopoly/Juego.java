@@ -624,7 +624,7 @@ public class Juego {
             case "piscina":
                 coste = casilla.getValorPiscina();
                 break;
-            case "pista_deporte":
+            case "pistaDeporte":
                 coste = casilla.getValorPistaDeporte();
                 break;
             default:
